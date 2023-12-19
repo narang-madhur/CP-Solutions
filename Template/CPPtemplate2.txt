@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+#define startt ios_base::sync_with_stdio(false);cin.tie(0);
+typedef long long  ll;
+using namespace std;
+#define vint vector<int>
+#define all(v) v.begin(), v.end()
+#define MOD 1000000007
+#define MOD2 998244353
+#define MX 1000000000
+#define MXL 1000000000000000000
+#define PI (ld)2*acos(0.0)
+#define pb push_back
+#define sc second
+#define fr first
+#define endl '\n'
+#define ld long double
+#define NO cout << "NO" << endl
+#define YES cout << "YES" << endl
+
+
+void solve()
+{
+    
+}
+
+int32_t main(){
+    startt
+    int t = 1;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+}
