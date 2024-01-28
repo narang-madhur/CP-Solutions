@@ -95,61 +95,64 @@ ll lcm(ll a,ll b){
  
  
 /*------------------------------------begin------------------------------------*/
-int solve2(int n , int m , map<int , map<int , bool>> &mp , map<int , map<int , int>> &dp)
+bool isValid(int mid , vector<int> &workers)
 {
-    if(mp[n][m] != 0)
+    int canBeDone = 0;
+    int toBeDone = 0;
+
+    for(auto &ele : workers)
     {
-        return INT_MAX;
+        canBeDone  += ((mid - min(mid , ele)) / 2);
+        toBeDone += ele - min(mid , ele);
     }
 
-    if(n <= 0)
-    {
-        return INT_MAX;
-    }
-
-    if(n > m)
-    {
-        return n - m;
-    }
-
-    if(n == m)
-    {
-        return 0;
-    }
-
-    if(dp[n][m] != 0)
-    {
-        return dp[n][m];
-    }
-
-    mp[n][m] = true;
-
-    int count1 = solve2(2 * n , m , mp , dp) + 1;
-    int count2 = solve2(n - 1 , m , mp , dp) + 1;
-
-    mp[n][m] = false;
-
-    return dp[n][m] = min(count1 , count2);
+    return toBeDone <= canBeDone;
 }
-
+ 
 void solve()
 {
     int n , m;
     cin >> n >> m;
 
-    map<int , map<int , bool>> mp;
-    map<int , map<int , int>> dp;
+    vector<int> workers(n , 0);
+    for(int i = 0 ; i < m ; i++)
+    {
+        int worker;
+        cin >> worker;
 
-    cout << solve2(n , m , mp , dp) << endl;
+        workers[worker - 1]++;
+    } 
 
+    int l = 1;
+    int r = 2 * m;
+    int ans = -1;
+
+    while(l <= r)
+    {
+        int mid = l + (r - l) / 2;
+
+        if(isValid(mid , workers))
+        {
+            ans = mid;
+            r = mid - 1;
+        }
+        else
+        {
+            l = mid + 1;
+        }
+    } 
+
+    cout << ans << endl;
+    
     return;
 }
  
 /*-------------------------------------end------------------------------------*/
 signed main()
 {
-    int t = 1;
-
+    int t;
+    cin>>t;
+    
     while(t--)
     {
         solve();
