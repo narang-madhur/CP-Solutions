@@ -95,49 +95,95 @@ ll lcm(ll a,ll b){
  
  
 /*------------------------------------begin------------------------------------*/
+int getUpper(int num , vector<int> &lis)
+{
+    int l = 0;
+    int r = lis.size() - 1;
+    int upperBound = lis.size();
+    
+    while(l <= r)
+    {
+        int mid = l + (r - l)/2;
+        
+        if(lis[mid] >= num)
+        {
+            upperBound = mid;
+            
+            r = mid - 1;
+        }
+        else
+        {
+            l = mid + 1;
+        }
+    }
+    
+    return upperBound;
+}
+
+int longestSubsequence(int n, vector<int> nums)
+{
+    vector<int> lis = {nums[0]};
+    int lisI = 0;
+    
+    for(int i = 1 ; i < n ; i++)
+    {
+        int upperBound = getUpper(nums[i] , lis);
+        
+        if(upperBound == lis.size())
+        {
+            lis.push_back(nums[i]);
+        }
+        else
+        {
+            lis[upperBound] = nums[i];
+        }
+    }
+    
+    return lis.size();
+}
  
 void solve()
 {
     int n;
     cin >> n;
 
-    set<int> numsSet;
+    unordered_map<int, int> nums;
+    vector<int> modified_nums;
     for(int i = 0 ; i < n ; i++)
     {
-        int x;
-        cin >> x;
-        numsSet.insert(x);
+        int num;
+        cin >> num;
+
+        if(nums[num] < 2)
+        {
+            nums[num]++;
+            modified_nums.push_back(num);
+        }
     }
 
-    if(numsSet.size() == 1)
+    sort(modified_nums.begin() , modified_nums.end());
+    
+    vector<int> new_nums;
+    for(int i = 0 ; i < modified_nums.size() ; i += 2)
     {
-        cout << 0 << endl;
-        return;
+        new_nums.push_back(modified_nums[i]);
     }
-    else if(numsSet.size() == 2)
+
+    int i = modified_nums.size() - 1;
+    if(i % 2 == 0)
     {
-        cout << 2 * (*numsSet.rbegin() - *numsSet.begin()) << endl;
-        return;
+        i--;
     }
 
-    vector<int> nums = {numsSet.begin() , numsSet.end()};
-    n = nums.size();
-
-    int ans = 0;
-    for(int i = 1 ; i < (n - 1) ; i++)
+    for(; i >= 0 ; i -= 2)
     {
-        int curAns = min(nums[i] - nums[0] + nums[i + 1] - nums[0] , nums[1] - nums[0] + nums[i + 1] - nums[0]);
-        ans = max(ans , curAns);
+        new_nums.push_back(modified_nums[i]);
     }
 
-    for(int i = 0 ; i < (n - 2) ; i++)
-    {
-        int curAns = min(nums[n - 1] - nums[i + 1] + nums[n - 1] - nums[i] , nums[n - 1] - nums[n - 2] + nums[n - 1] - nums[i]);
-        ans = max(ans , curAns);
-    }
-
-    cout << ans << endl;
-    return;
+    vector<int> rev_new_nums = new_nums;
+    reverse(rev_new_nums.begin() , rev_new_nums.end());
+    
+    cout << min(longestSubsequence(new_nums.size() , new_nums) , longestSubsequence(rev_new_nums.size() , rev_new_nums)) << endl;
 }
  
 /*-------------------------------------end------------------------------------*/
