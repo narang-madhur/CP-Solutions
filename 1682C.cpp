@@ -32,7 +32,7 @@ template<class T>istream& operator >> (istream &is, vector<T>& V) {for(auto &e :
 #define mem(x, y) memset(x, y, sizeof(x))
 #define sp(x) cout << fixed;cout << setprecision(x)
 #define sz size()
-#define mahadev ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+#define optimise ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
 #define PI 3.14159265358979323846
 #define lb lower_bound
 #define ub upper_bound
@@ -95,95 +95,28 @@ ll lcm(ll a,ll b){
  
  
 /*------------------------------------begin------------------------------------*/
-int getUpper(int num , vector<int> &lis)
-{
-    int l = 0;
-    int r = lis.size() - 1;
-    int upperBound = lis.size();
-    
-    while(l <= r)
-    {
-        int mid = l + (r - l)/2;
-        
-        if(lis[mid] >= num)
-        {
-            upperBound = mid;
-            
-            r = mid - 1;
-        }
-        else
-        {
-            l = mid + 1;
-        }
-    }
-    
-    return upperBound;
-}
-
-int longestSubsequence(int n, vector<int> nums)
-{
-    vector<int> lis = {nums[0]};
-    int lisI = 0;
-    
-    for(int i = 1 ; i < n ; i++)
-    {
-        int upperBound = getUpper(nums[i] , lis);
-        
-        if(upperBound == lis.size())
-        {
-            lis.push_back(nums[i]);
-        }
-        else
-        {
-            lis[upperBound] = nums[i];
-        }
-    }
-    
-    return lis.size();
-}
- 
 void solve()
 {
     int n;
     cin >> n;
 
-    unordered_map<int, int> nums;
-    vector<int> modified_nums;
+    map<int, int> nums;
+    int size = 0;
+
     for(int i = 0 ; i < n ; i++)
     {
         int num;
         cin >> num;
-
-        if(nums[num] < 2)
-        {
-            nums[num]++;
-            modified_nums.push_back(num);
-        }
+        nums[num]++;
     }
 
-    sort(modified_nums.begin() , modified_nums.end());
-    
-    vector<int> new_nums;
-    for(int i = 0 ; i < modified_nums.size() ; i += 2)
+    for(auto &pairs : nums)
     {
-        new_nums.push_back(modified_nums[i]);
+        size += min(2ll , pairs.second);
     }
 
-    int i = modified_nums.size() - 1;
-    if(i % 2 == 0)
-    {
-        i--;
-    }
-
-    for(; i >= 0 ; i -= 2)
-    {
-        new_nums.push_back(modified_nums[i]);
-    }
-
-    vector<int> rev_new_nums = new_nums;
-    reverse(rev_new_nums.begin() , rev_new_nums.end());
-    
-    cout << min(longestSubsequence(new_nums.size() , new_nums) , longestSubsequence(rev_new_nums.size() , rev_new_nums)) << endl;
+    cout << (size + 1) / 2 << endl;
+    return;
 }
  
 /*-------------------------------------end------------------------------------*/
